@@ -5,11 +5,16 @@ import { useRouter } from 'vue-router'
 const types = ['乳腺癌', '胰腺癌', '肺癌', '胃癌', '肝癌', '食道癌']
 const router = useRouter()
 
-const selected = ref('乳腺癌') // 当前仅允许选择乳腺癌
+const selected = ref('乳腺癌')
 
 const handleNext = () => {
-  if (selected.value !== '乳腺癌') return
-  router.push('/upload')
+  // 确保参数正确编码传递
+  router.push({
+    path: '/upload',
+    query: { 
+      type: encodeURIComponent(selected.value) // 编码参数确保特殊字符正确处理
+    }
+  })
 }
 </script>
 
@@ -29,7 +34,6 @@ const handleNext = () => {
           v-for="type in types"
           :key="type"
           :type="type === selected ? 'primary' : 'info'"
-          :disabled="type !== '乳腺癌'"
           @click="selected = type"
         >
           {{ type }}
@@ -57,7 +61,7 @@ const handleNext = () => {
   padding: 2rem;
   border-radius: 10px;
   max-width: 500px;
-  margin: 3rem auto 0 auto;
+  margin: 10rem auto 0 auto;
   text-align: center;
 }
 
@@ -65,6 +69,6 @@ const handleNext = () => {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
-  margin: 2rem 0;
+  margin: 3rem 0;
 }
 </style>

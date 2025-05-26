@@ -1,21 +1,87 @@
 <script setup>
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { ElMessage } from 'element-plus'
-import { UploadFilled } from '@element-plus/icons-vue'
+import { UploadFilled, Picture } from '@element-plus/icons-vue'
+import { computed, ref } from 'vue'
 
+const route = useRoute()
 const router = useRouter()
+
+// **新增：模拟数据库存储的病理信息**
+const mockDatabase = {
+  'image001.png': { // 图片文件名作为键
+    pathologyNumber: 'XXXXXX',
+    name: 'XXXXXX',
+    age: 'XX',
+    department: 'XXX科',
+    morphology: '肿瘤细胞呈巢状分布，细胞核大深染，可见核分裂象。',
+    diagnosis: '左乳：切除一切乳腺\n标本，大小20cm×16cm×4cm，梭形\n皮肤15cm×6cm，距乳头0.5cm上方可见一个2.5cm×2.5cm×2cm的肿物，切面灰白质硬\n\n东院免疫结果：Er（0%阳性），HER2（3+），\nKi（阳性细胞数70%），P53（0%阳性），AR（0%阳性），\nCK5/6（0%阳性），P63（浸润区肌上皮-），\nCalponin（浸润区肌上皮-）左乳：瘤床处乳腺浸润性导管癌Ⅲ级，未见明确脉管瘤栓及神经受侵（MP分级3级）。\n底源（-）。\n乳头（-）。\n淋巴结：第一水平1/12，第二水平0/1，腋静脉上淋巴结0/2，肌间组织0/1转移。'
+  }
+}
+
+const pathologyType = computed(() => {
+  const type = route.query.type
+  return type ? decodeURIComponent(type) : '乳腺癌'
+})
+
+// 新增状态：存储上传的文件信息
+const uploadedFile = ref(null)
+const previewVisible = ref(false)
+const previewImageUrl = ref('')
 
 const goPrev = () => {
   router.push('/type')
 }
 
 const goNext = () => {
-  ElMessage.success('图片上传成功（模拟）')
-  router.push('/analyze')
+  if (!uploadedFile.value) {
+    ElMessage.warning('请先上传图片')
+    return
+  }
+
+  // 从模拟数据库获取病理信息
+  const fileName = uploadedFile.value.name // 获取上传的文件名
+  const pathologyData = mockDatabase[fileName] || {} // 根据文件名匹配数据
+
+  if (!pathologyData.pathologyNumber) {
+    ElMessage.error('未找到该图片对应的病理信息')
+    return
+  }
+
+  ElMessage.success('图片上传成功')
+
+  // 传递病理信息和图片URL到分析页面
+  const fileUrl = URL.createObjectURL(uploadedFile.value.raw)
+  router.push({
+    path: '/analyze',
+    query: { 
+      type: pathologyType.value,
+      imageUrl: fileUrl,
+      // **新增参数：传递病理信息**
+      pathologyNumber: pathologyData.pathologyNumber,
+      name: pathologyData.name,
+      age: pathologyData.age,
+      department: pathologyData.department,
+      morphology: pathologyData.morphology,
+      diagnosis: pathologyData.diagnosis
+    }
+  })
 }
 
-const handleSuccess = (res) => {
-  ElMessage.success(`文件 ${res.filename} 上传成功！`)
+const handleSuccess = (response, file) => {
+  uploadedFile.value = file
+  ElMessage.success(`文件 ${file.name} 上传成功！`)
+}
+
+const handleRemove = () => {
+  uploadedFile.value = null
+}
+
+const handlePreview = () => {
+  if (uploadedFile.value) {
+    previewImageUrl.value = URL.createObjectURL(uploadedFile.value.raw)
+    previewVisible.value = true
+  }
 }
 </script>
 
@@ -29,7 +95,7 @@ const handleSuccess = (res) => {
     </el-steps>
 
     <div class="upload-box">
-      <p class="tip">请上传 .svs 类型的乳腺癌病理图像</p>
+      <p class="tip">请上传 .svs 类型的{{ pathologyType }}病理图像</p>
 
       <el-upload
         class="upload-area"
@@ -39,12 +105,29 @@ const handleSuccess = (res) => {
         :on-success="handleSuccess"
         accept=".png, .jpg, .jpeg, .svs"
       >
-        <el-icon><UploadFilled /></el-icon>
-        <div class="el-upload__text">点击或拖拽上传</div>
+        <template v-if="!uploadedFile">
+          <el-icon><UploadFilled /></el-icon>
+          <div class="el-upload__text">点击或拖拽上传</div>
+        </template>
+        <template v-else>
+          <div class="uploaded-file-container">
+            <div class="delete-btn" @click.stop="handleRemove">×</div>
+            <div class="uploaded-file">
+              <el-icon><Picture /></el-icon>
+              <el-link type="primary" @click.stop="handlePreview">
+                {{ uploadedFile.name }}
+              </el-link>
+            </div>
+          </div>
+        </template>
         <template #tip>
           <div class="el-upload__tip">仅支持 .png/.jpg/jpeg/.svs 文件</div>
         </template>
       </el-upload>
+
+      <el-dialog v-model="previewVisible" title="图片预览" width="70%">
+        <img :src="previewImageUrl" style="width: 100%" alt="预览图片" />
+      </el-dialog>
 
       <div class="btns">
         <el-button @click="goPrev">上一步</el-button>
@@ -79,10 +162,53 @@ const handleSuccess = (res) => {
 
 .upload-area {
   margin-bottom: 2rem;
+  position: relative;
+}
+
+.uploaded-file-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.uploaded-file {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 20px;
+  height: 100%;
+}
+
+.uploaded-file .el-icon {
+  font-size: 48px;
+  color: var(--el-color-primary);
+}
+
+.delete-btn {
+  position: absolute;
+  top: 5px;
+  right: 220px;
+  font-size: 20px;
+  cursor: pointer;
+  color: #999;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.delete-btn:hover {
+  color: #ff4d4f;
+  background-color: #fff2f0;
 }
 
 .btns {
   display: flex;
   justify-content: space-between;
 }
-</style>
+
+</style>  

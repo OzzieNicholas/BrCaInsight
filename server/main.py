@@ -26,3 +26,5 @@ async def upload_image(file: UploadFile = File(...)):
         "filename": file.filename,
         "message": "文件上传成功，模拟返回结果"
     }
+
+print("服务已启动，请访问 http://localhost:8000")

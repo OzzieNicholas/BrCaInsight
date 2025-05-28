@@ -48,12 +48,20 @@ const exportPDF = () => {
 
 <template>
   <div class="report-page">
-    <el-steps :active="4" finish-status="success" align-center>
-      <el-step title="病理类型" />
-      <el-step title="上传图片" />
-      <el-step title="查看分析" />
-      <el-step title="保存报告" />
-    </el-steps>
+
+    <div class="logo-section">
+      <img src="/logo.png" alt="系统logo" class="logo">
+      <span class="system-title">病理报告<br />生成系统</span>
+    </div>
+
+    <div class="progress-bar">
+      <el-steps :active="4" finish-status="success" align-center>
+        <el-step title="病理类型"/>
+        <el-step title="上传图片"/>
+        <el-step title="查看分析"/>
+        <el-step title="保存报告"/>
+      </el-steps>
+  </div>
 
     <div class="report-box">
       <h2>人工智能辅助报告下载</h2>
@@ -96,8 +104,38 @@ const exportPDF = () => {
   padding: 2rem;
 }
 
+
+::v-deep .el-step__title {
+  font-size: 25px;
+}
+.progress-bar {
+  width: 100%;
+  max-width: 2000px;
+  margin: 0 auto;
+  margin-top: -4.2rem;
+}
+
+.logo-section {
+    display: flex;
+    align-items: center; 
+}
+
+.logo {
+  height: auto;
+  width: 100px;
+  margin-right: 1rem; 
+}
+
+.system-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 1.0rem;
+  color: #333;
+  line-height: 1.5;
+}
+
 .report-box {
-  max-width: 700px;
+  max-width: 1000px;
   margin: 2rem auto;
   background: rgba(255, 255, 255, 0.95);
   padding: 2rem;

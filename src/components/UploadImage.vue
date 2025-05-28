@@ -14,7 +14,7 @@ const mockDatabase = {
     name: 'XXXXXX',
     age: 'XX',
     department: 'XXX科',
-    morphology: '肿瘤细胞呈巢状分布，细胞核大深染，可见核分裂象。',
+    morphology: '肿瘤组织呈巢片状，浸润性生长，巢团中央可见坏死，肿瘤细胞异型性明显，细胞核大深染。',
     diagnosis: '左乳：切除一切乳腺\n标本，大小20cm×16cm×4cm，梭形\n皮肤15cm×6cm，距乳头0.5cm上方可见一个2.5cm×2.5cm×2cm的肿物，切面灰白质硬\n\n东院免疫结果：Er（0%阳性），HER2（3+），\nKi（阳性细胞数70%），P53（0%阳性），AR（0%阳性），\nCK5/6（0%阳性），P63（浸润区肌上皮-），\nCalponin（浸润区肌上皮-）左乳：瘤床处乳腺浸润性导管癌Ⅲ级，未见明确脉管瘤栓及神经受侵（MP分级3级）。\n底源（-）。\n乳头（-）。\n淋巴结：第一水平1/12，第二水平0/1，腋静脉上淋巴结0/2，肌间组织0/1转移。'
   }
 }
@@ -87,12 +87,19 @@ const handlePreview = () => {
 
 <template>
   <div class="upload-page">
-    <el-steps :active="2" finish-status="success" align-center>
-      <el-step title="病理类型" />
-      <el-step title="上传图片" />
-      <el-step title="查看分析" />
-      <el-step title="保存报告" />
-    </el-steps>
+    <div class="logo-section">
+      <img src="/logo.png" alt="系统logo" class="logo">
+      <span class="system-title">病理报告<br />生成系统</span>
+    </div>
+
+    <div class="progress-bar">
+      <el-steps :active="2" finish-status="success" align-center>
+        <el-step title="病理类型" />
+        <el-step title="上传图片" />
+        <el-step title="查看分析" />
+        <el-step title="保存报告" />
+      </el-steps>
+    </div>
 
     <div class="upload-box">
       <p class="tip">请上传 .svs 类型的{{ pathologyType }}病理图像</p>
@@ -153,6 +160,32 @@ const handlePreview = () => {
   background-color: rgba(255, 255, 255, 0.95);
   border-radius: 10px;
   text-align: center;
+}
+
+.logo-section {
+    display: flex;
+    align-items: center; 
+}
+
+.logo {
+  height: auto;
+  width: 100px;
+  margin-right: 1rem; 
+}
+
+.system-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1.0rem;
+  color: #333;
+  line-height: 1.5;
+}
+
+.progress-bar {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  margin-top: -5rem;
 }
 
 .tip {

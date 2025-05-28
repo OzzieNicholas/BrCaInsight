@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<image xmlns="http://www.vips.ecs.soton.ac.uk//dzsave" date="2025-05-28T15:43:38.571722+08" version="8.14.3">
+  <properties>
+    <property>
+      <name>width</name>
+      <value type="gint">59820</value>
+    </property>
+    <property>
+      <name>height</name>
+      <value type="gint">43006</value>
+    </property>
+    <property>
+      <name>bands</name>
+      <value type="gint">3</value>
+    </property>
+    <property>
+      <name>xoffset</name>
+      <value type="gint">0</value>
+    </property>
+    <property>
+      <name>yoffset</name>
+      <value type="gint">0</value>
+    </property>
+    <property>
+      <name>xres</name>
+      <value type="gdouble">1</value>
+    </property>
+    <property>
+      <name>yres</name>
+      <value type="gdouble">1</value>
+    </property>
+    <property>
+      <name>vips-loader</name>
+      <value type="VipsRefString">tiffload</value>
+    </property>
+    <property>
+      <name>n-pages</name>
+      <value type="gint">11</value>
+    </property>
+    <property>
+      <name>image-description</name>
+      <value type="VipsRefString">Aperio Format Scanned By KFBIO
+59820x42921 [0,0 59820x42921] (256x256), JPEG/RGB Q=30|AppMag = 20|MPP = 0.485696|User = KFSCAN02000112016|Time = 2024-08-22 15:41:48|Time-Used = 00:00:00|XX = 0|YY = 0</value>
+    </property>
+    <property>
+      <name>orientation</name>
+      <value type="gint">1</value>
+    </property>
+    <property>
+      <name>vips-sequential</name>
+      <value type="gint">1</value>
+    </property>
+  </properties>
+</image>

@@ -8,11 +8,10 @@ const router = useRouter()
 const selected = ref('乳腺癌')
 
 const handleNext = () => {
-  // 确保参数正确编码传递
   router.push({
     path: '/upload',
     query: { 
-      type: encodeURIComponent(selected.value) // 编码参数确保特殊字符正确处理
+      type: encodeURIComponent(selected.value)
     }
   })
 }
@@ -20,13 +19,22 @@ const handleNext = () => {
 
 <template>
   <div class="type-page">
-    <el-steps :active="1" finish-status="success" align-center>
-      <el-step title="病理类型" />
-      <el-step title="上传图片" />
-      <el-step title="查看分析" />
-      <el-step title="保存报告" />
-    </el-steps>
+    
+    <div class="logo-section">
+      <img src="/logo.png" alt="系统logo" class="logo">
+      <span class="system-title">病理报告<br />生成系统</span>
+    </div>
+    
+    <div class="progress-bar">
+      <el-steps :active="1" finish-status="success" align-center>
+        <el-step title="病理类型" />
+        <el-step title="上传图片" />
+        <el-step title="查看分析" />
+        <el-step title="保存报告" />
+      </el-steps>
+    </div>
 
+    
     <div class="pathology-box">
       <h2>病理类型</h2>
       <div class="grid">
@@ -56,19 +64,46 @@ const handleNext = () => {
   padding: 2rem;
 }
 
+.logo-section {
+    display: flex;
+    align-items: center; 
+}
+
+.logo {
+  height: auto;
+  width: 100px;
+  margin-right: 1rem; 
+}
+
+.system-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1.0rem;
+  color: #333;
+  line-height: 1.5;
+}
+
 .pathology-box {
   background-color: rgba(255, 255, 255, 0.95);
   padding: 2rem;
   border-radius: 10px;
   max-width: 500px;
-  margin: 10rem auto 0 auto;
+  margin: 3rem auto 0 auto;
   text-align: center;
+}
+
+.progress-bar {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  margin-top: -5rem;
 }
 
 .grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
-  margin: 3rem 0;
+  margin: 2rem 0;
 }
+
 </style>

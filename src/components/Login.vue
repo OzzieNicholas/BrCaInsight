@@ -79,8 +79,10 @@ const switchMode = () => {
 <template>
   <div class="login-page">
     <div class="login-box">
-      <h1 class="title">病理报告生成系统</h1>
-
+      <div class="header-container">
+        <img src="/logo.png" alt="系统 Logo" class="logo">
+        <h1 class="title">病理报告<br />生成系统</h1>
+      </div>
       <el-input
         v-model="username"
         placeholder="用户名"
@@ -143,24 +145,41 @@ const switchMode = () => {
 
 .login-box {
   background-color: rgba(255, 255, 255, 0.9);
-  padding: 3rem;
+  padding: 2rem;
   border-radius: 10px;
   text-align: center;
   width: 450px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
+
+.header-container {
+  display: flex;
+  align-items: center; 
+  justify-content: center; 
+  gap: 2rem; 
+  padding-right: 10px; 
+  margin-bottom: 2rem; 
+}
+
+.logo {
+  height: 120px; 
+  width: 80px;
+}
+
+
 .title {
-  font-size: 2rem;
+  font-size: 1.5rem;
   font-weight: bold;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   color: #333;
   line-height: 2;
 }
 
+
 .tips {
   margin-top: 2rem;
-  font-size: 0.8rem;
+  font-size: 0.rem;
   color: #666;
 }
 </style>

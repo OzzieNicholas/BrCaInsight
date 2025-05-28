@@ -128,7 +128,7 @@ const handlePreview = () => {
           </div>
         </template>
         <template #tip>
-          <div class="el-upload__tip">仅支持 .png/.jpg/jpeg/.svs 文件</div>
+          <div class="el-upload__tip">仅支持 .png/.jpg/.jpeg/.svs 文件</div>
         </template>
       </el-upload>
 

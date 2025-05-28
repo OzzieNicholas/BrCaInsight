@@ -1,6 +1,7 @@
 <script setup>
 import { useRouter, useRoute } from 'vue-router'
 import { ref, onMounted } from 'vue'
+import { ElMessage } from 'element-plus'
 
 const router = useRouter()
 const route = useRoute()
@@ -27,7 +28,6 @@ const goNext = () => {
   })
 }
 
-// 新增：打开OpenSeadragon查看器
 const openZoomViewer = () => {
   window.open('/src/components/openseadragon/zoomFiles/test.html', '_blank')
 }
@@ -42,34 +42,36 @@ const allPatches = ref([
 ])
 
 const displayedPatches = ref(allPatches.value.slice(0, 2))
-const showEditMode = ref(false)
+const editDialogVisible = ref(false)
 const selectedPatches = ref([])
-const toggleEditMode = () => {
-  showEditMode.value = !showEditMode.value
-  if (!showEditMode.value) {
-    selectedPatches.value = []
-  }
+
+const openEditDialog = () => {
+  selectedPatches.value = [...displayedPatches.value]
+  editDialogVisible.value = true
 }
+
 const selectPatch = (patch) => {
   const index = selectedPatches.value.findIndex(p => p.name === patch.name)
   if (index === -1) {
-    selectedPatches.value.push(patch)
+    if (selectedPatches.value.length < 2) {
+      selectedPatches.value.push(patch)
+    } else {
+      ElMessage.warning('最多只能选择2个Patch')
+    }
   } else {
     selectedPatches.value.splice(index, 1)
   }
 }
 
-const confirmSelection = () => {
+const saveEdits = () => {
   if (selectedPatches.value.length === 2) {
     displayedPatches.value = [...selectedPatches.value]
-    showEditMode.value = false
-    selectedPatches.value = []
+    editDialogVisible.value = false
   } else {
     ElMessage.warning('请选择2个Patch')
   }
 }
 
-// 病理信息参数
 const pathologyNumber = ref('')
 const name = ref('')
 const age = ref('')
@@ -78,10 +80,7 @@ const morphology = ref('')
 const diagnosis = ref('')
 
 onMounted(() => {
-  // 从路由参数中获取图片URL
   imageUrl.value = route.query.imageUrl || ''
-
-  // 从路由参数中获取病理信息
   pathologyNumber.value = route.query.pathologyNumber || 'XXXXXX'
   name.value = route.query.name || 'XXX'
   age.value = route.query.age || 'XX'
@@ -138,36 +137,80 @@ onMounted(() => {
         <div class="patches">
           <h3>Patch 区域</h3>
           <div class="patch-list">
-            <template v-if="!showEditMode">
-              <div v-for="(patch, index) in displayedPatches" :key="index" class="patch-item">
-                <img :src="patch.image" class="patch-image" />
-              </div>
-              <el-button type="success" plain @click="toggleEditMode">编辑 Patch</el-button>
-            </template>
-            
-            <template v-else>
-              <div v-for="(patch, index) in allPatches" :key="index" class="patch-item">
-                <img 
-                  :src="patch.image" 
-                  class="patch-image" 
-                  :class="{ 'selected-patch': selectedPatches.some(p => p.name === patch.name) }"
-                  @click="selectPatch(patch)"
-                />
-              </div>
-              <div class="edit-actions">
-                <el-button @click="toggleEditMode">取消</el-button>
-                <el-button type="primary" @click="confirmSelection">确认</el-button>
-              </div>
-            </template>
+            <div v-for="(patch, index) in displayedPatches" :key="index" class="patch-item">
+              <img :src="patch.image" class="patch-image" />
+            </div>
           </div>
         </div>
 
         <div class="btns">
           <el-button @click="goPrev">上一步</el-button>
+          <el-button type="success" plain @click="openEditDialog">编辑报告</el-button>
           <el-button type="primary" @click="goNext">下一步</el-button>
         </div>
       </div>
     </div>
+
+    <!-- Edit Dialog -->
+    <el-dialog
+      v-model="editDialogVisible"
+      title="编辑病理信息"
+      width="80%"
+      top="5vh"
+    >
+      <div class="edit-dialog-content">
+        <div class="edit-form">
+          <el-form label-width="120px">
+            <el-form-item label="病理形态">
+              <el-input
+                v-model="morphology"
+                type="textarea"
+                :rows="5"
+                placeholder="请输入病理形态描述"
+                class="fixed-textarea morphology-textarea"
+              />
+            </el-form-item>
+            <el-form-item label="病理诊断">
+              <el-input
+                v-model="diagnosis"
+                type="textarea"
+                :rows="10"
+                placeholder="请输入病理诊断"
+                class="fixed-textarea diagnosis-textarea"
+              />
+            </el-form-item>
+          </el-form>
+        </div>
+
+        <div class="patch-selection">
+          <h3>选择 Patch (最多选择2个)</h3>
+          <div class="patch-row">
+            <div
+              v-for="(patch, index) in allPatches"
+              :key="index"
+              class="patch-select-item"
+              @click="selectPatch(patch)"
+            >
+              <img
+                :src="patch.image"
+                class="patch-select-image"
+                :class="{ 'selected-patch': selectedPatches.some(p => p.name === patch.name) }"
+              />
+              <div class="patch-name">{{ patch.name }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="editDialogVisible = false">取消</el-button>
+          <el-button type="primary" @click="saveEdits">
+            确认
+          </el-button>
+        </span>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
@@ -254,11 +297,6 @@ onMounted(() => {
   transform: scale(1.05);
 }
 
-.selected-patch {
-  border: 2px solid #409EFF;
-  box-shadow: 0 0 8px rgba(64, 158, 255, 0.6);
-}
-
 ::v-deep .el-step__title {
   font-size: 25px;
 }
@@ -294,13 +332,74 @@ onMounted(() => {
   margin-top: 2rem;
 }
 
-.edit-actions {
+/* Edit Dialog Styles */
+.edit-dialog-content {
   display: flex;
-  gap: 10px;
-  margin-left: 10px;
+  flex-direction: column;
+  gap: 2rem;
 }
 
-.diagnosis-content {
-  white-space: pre-line;
+.edit-form {
+  margin-bottom: 2rem;
+}
+
+.fixed-textarea {
+  width: 100%;
+  resize: none;
+}
+
+.morphology-textarea {
+  height: 100px;
+}
+
+.diagnosis-textarea {
+  height: 150px;
+}
+
+.patch-selection {
+  margin-top: 1rem;
+}
+
+.patch-row {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  padding: 10px 0;
+}
+
+.patch-select-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.3s;
+  flex-shrink: 0;
+}
+
+.patch-select-item:hover {
+  transform: scale(1.05);
+}
+
+.patch-select-image {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border: 2px solid #ddd;
+  border-radius: 4px;
+}
+
+.selected-patch {
+  border: 2px solid #409EFF;
+  box-shadow: 0 0 8px rgba(64, 158, 255, 0.6);
+}
+
+.patch-name {
+  margin-top: 8px;
+  font-size: 14px;
+  color: #666;
+}
+
+.description-content {
+  white-space: pre-wrap;
 }
 </style>

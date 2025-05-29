@@ -48,21 +48,6 @@ const exportPDF = () => {
 
 <template>
   <div class="report-page">
-
-    <div class="logo-section">
-      <img src="/logo.png" alt="系统logo" class="logo">
-      <span class="system-title">病理报告<br />生成系统</span>
-    </div>
-
-    <div class="progress-bar">
-      <el-steps :active="4" finish-status="success" align-center>
-        <el-step title="病理类型"/>
-        <el-step title="上传图片"/>
-        <el-step title="查看分析"/>
-        <el-step title="保存报告"/>
-      </el-steps>
-  </div>
-
     <div class="report-box">
       <h2>人工智能辅助报告下载</h2>
 
@@ -97,8 +82,6 @@ const exportPDF = () => {
 
 <style scoped>
 .report-page {
-  height: 100vh;
-  background-image: url('../assets/bg.png');
   background-size: cover;
   background-position: center;
   padding: 2rem;

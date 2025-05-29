@@ -102,20 +102,6 @@ onMounted(() => {
 
 <template>
   <div class="analyze-page">
-    <div class="logo-section">
-      <img src="/logo.png" alt="系统logo" class="logo">
-      <span class="system-title">病理报告<br />生成系统</span>
-    </div>
-    
-    <div class="progress-bar">
-      <el-steps :active="3" finish-status="success" align-center>
-        <el-step title="病理类型" />
-        <el-step title="上传图片" />
-        <el-step title="查看分析" />
-        <el-step title="保存报告" />
-      </el-steps>
-    </div>
-
     <div class="analyze-box">
       <div class="left-preview">
         <div v-if="!imageUrl" class="preview-placeholder">图像预览区域</div>
@@ -271,23 +257,12 @@ html, body {
   height: 100vh;
   display: flex;
   flex-direction: column;
-  background-image: url('../assets/bg.png');
   background-size: cover;
   background-position: center;
   box-sizing: border-box;
-  padding: 1rem;
+  overflow: hidden;
 }
 
-.logo-section {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 0.5rem;
-}
-
-.logo {
-  width: 80px;
-}
 
 .system-title {
   font-size: 1.8rem;

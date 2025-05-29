@@ -87,20 +87,6 @@ const handlePreview = () => {
 
 <template>
   <div class="upload-page">
-    <div class="logo-section">
-      <img src="/logo.png" alt="系统logo" class="logo">
-      <span class="system-title">病理报告<br />生成系统</span>
-    </div>
-
-    <div class="progress-bar">
-      <el-steps :active="2" finish-status="success" align-center>
-        <el-step title="病理类型" />
-        <el-step title="上传图片" />
-        <el-step title="查看分析" />
-        <el-step title="保存报告" />
-      </el-steps>
-    </div>
-
     <div class="upload-box">
       <p class="tip">请上传 .svs 类型的{{ pathologyType }}病理图像</p>
 
@@ -146,11 +132,8 @@ const handlePreview = () => {
 
 <style scoped>
 .upload-page {
-  height: 100vh;
-  background-image: url('../assets/bg.png');
   background-size: cover;
   background-position: center;
-  padding: 2rem;
 }
 
 .upload-box {

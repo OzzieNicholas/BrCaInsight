@@ -19,22 +19,6 @@ const handleNext = () => {
 
 <template>
   <div class="type-page">
-    
-    <div class="logo-section">
-      <img src="/logo.png" alt="系统logo" class="logo">
-      <span class="system-title">病理报告<br />生成系统</span>
-    </div>
-    
-    <div class="progress-bar">
-      <el-steps :active="1" finish-status="success" align-center>
-        <el-step title="病理类型" />
-        <el-step title="上传图片" />
-        <el-step title="查看分析" />
-        <el-step title="保存报告" />
-      </el-steps>
-    </div>
-
-    
     <div class="pathology-box">
       <h2>病理类型</h2>
       <div class="grid">
@@ -57,22 +41,8 @@ const handleNext = () => {
 
 <style scoped>
 .type-page {
-  height: 100vh;
-  background-image: url('../assets/bg.png');
   background-size: cover;
   background-position: center;
-  padding: 2rem;
-}
-
-.logo-section {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 1rem;
-}
-
-.logo {
-  width: 100px;
 }
 
 .system-title {

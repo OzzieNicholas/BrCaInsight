@@ -66,21 +66,26 @@ const handleNext = () => {
 
 .logo-section {
     display: flex;
-    align-items: center; 
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
 }
 
 .logo {
-  height: auto;
   width: 100px;
-  margin-right: 1rem; 
 }
 
 .system-title {
-  font-size: 1.5rem;
-  font-weight: bold;
-  margin-bottom: 1.0rem;
-  color: #333;
-  line-height: 1.5;
+  font-size: 1.8rem;
+  line-height: 1.2;
+  word-break: bold;
+}
+
+.progress-bar {
+  width: 80%;
+  max-width: 1200px;
+  margin: 0 auto;
+  margin-top: -4.2rem;
 }
 
 .pathology-box {
@@ -92,12 +97,7 @@ const handleNext = () => {
   text-align: center;
 }
 
-.progress-bar {
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  margin-top: -5rem;
-}
+
 
 .grid {
   display: grid;

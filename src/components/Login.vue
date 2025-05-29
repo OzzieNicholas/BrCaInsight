@@ -169,13 +169,10 @@ const switchMode = () => {
 
 
 .title {
-  font-size: 1.5rem;
+  font-size: 1.8rem;
   font-weight: bold;
-  margin-bottom: 1rem;
-  color: #333;
-  line-height: 2;
+  line-height: 1.2;
 }
-
 
 .tips {
   margin-top: 2rem;

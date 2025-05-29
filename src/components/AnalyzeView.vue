@@ -166,7 +166,7 @@ onMounted(() => {
     <el-dialog
       v-model="heatmapDialogVisible"
       title="可视化热图"
-      width="80%"
+      width="70%"
       top="5vh"
     >
       <div class="heatmap-container">
@@ -201,7 +201,7 @@ onMounted(() => {
     <el-dialog
       v-model="editDialogVisible"
       title="编辑病理信息"
-      width="60%"
+      width="80%"
       top="5vh"
     >
       <div class="edit-dialog-content">
@@ -227,6 +227,7 @@ onMounted(() => {
             </el-form-item>
           </el-form>
         </div>
+      </div>
 
         <div class="patch-selection">
           <h3>选择 Patch (最多选择2个)</h3>
@@ -245,7 +246,6 @@ onMounted(() => {
             </div>
           </div>
         </div>
-      </div>
 
       <template #footer>
         <span class="dialog-footer">
@@ -260,192 +260,116 @@ onMounted(() => {
 </template>
 
 <style scoped>
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden; /* 禁止滚动条 */
+}
+
 .analyze-page {
   height: 100vh;
+  display: flex;
+  flex-direction: column;
   background-image: url('../assets/bg.png');
   background-size: cover;
   background-position: center;
-  padding: 2rem;
+  box-sizing: border-box;
+  padding: 1rem;
 }
 
-.analyze-box {
+.logo-section {
   display: flex;
-  margin: 2rem auto;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.logo {
+  width: 80px;
+}
+
+.system-title {
+  font-size: 1.8rem;
+  word-break: bold;
+  line-height: 1.2;
+}
+
+.progress-bar {
+  width: 80%;
   max-width: 1200px;
-  background: rgba(255, 255, 255, 0.95);
+  margin: 0 auto;
+  margin-top: -4.2rem;
+}
+.analyze-box {
+  flex: 1; /* 占满剩余高度 */
+  display: flex;
+  flex-direction: row;
+  width: 75%; 
+  gap: 1rem;
+  margin: 0 auto;
+  background-color: rgba(255, 255, 255, 0.95);
   border-radius: 10px;
-  padding: 2rem;
-  gap: 2rem;
+  padding: 1rem;
+  overflow: hidden;
+  min-height: 0;
 }
 
 .left-preview {
   flex: 1;
+  min-width: 0;
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 2px dahed #ccc;
-  min-height: 400px;
-  background-color: white;
-}
-
-.preview-placeholder {
-  font-size: 1.2rem;
-  color: #999;
+  background-color: #fff;
+  border: 1px dashed #ccc;
 }
 
 .preview-image {
   max-width: 100%;
-  max-height: 400px;
-  cursor: pointer;
-  transition: transform 0.3s;
-}
-
-.preview-image:hover {
-  transform: scale(1.02);
+  max-height: 100%;
+  object-fit: contain;
 }
 
 .right-info {
   flex: 1.5;
+  min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.5rem;
+  overflow: hidden;
+}
+
+.meta {
+  flex: 1;
+  overflow: auto;
 }
 
 .patches {
-  margin-top: 1rem;
+  flex-shrink: 0;
 }
 
 .patch-list {
   display: flex;
+  gap: 8px;
   flex-wrap: wrap;
-  align-items: center;
-  gap: 10px;
-}
-
-.patch-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
 }
 
 .patch-image {
-  width: 80px;
-  height: 80px;
+  width: 120px;
+  height: 60px;
   object-fit: cover;
-  border: 1px solid #ddd;
+  border: 1px solid #ccc;
   border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.3s;
-}
-
-.patch-image:hover {
-  transform: scale(1.05);
-}
-
-::v-deep .el-step__title {
-  font-size: 25px;
-}
-.progress-bar {
-  width: 100%;
-  max-width: 2000px;
-  margin: 0 auto;
-  margin-top: -4.2rem;
-}
-
-.logo-section {
-    display: flex;
-    align-items: center; 
-}
-
-.logo {
-  height: auto;
-  width: 100px;
-  margin-right: 1rem; 
-}
-
-.system-title {
-  font-size: 2.5rem;
-  font-weight: bold;
-  margin-bottom: 1.0rem;
-  color: #333;
-  line-height: 1.5;
-}
-
-.btns {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 2rem;
-  gap: 1rem;
-}
-
-.btns .el-button {
-  flex: 1;
-}
-
-/* 热图对话框样式 */
-.heatmap-container {
-  display: flex;
-  gap: 2rem;
-  justify-content: center;
-}
-
-.image-column {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.heatmap-image {
-  max-width: 100%;
-  max-height: 500px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-}
-
-.empty-placeholder {
-  height: 300px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #999;
-  border: 1px dashed #ddd;
-  width: 100%;
-}
-
-/* 编辑对话框样式 */
-.edit-dialog-content {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-}
-
-.edit-form {
-  margin-bottom: 2rem;
-}
-
-.fixed-textarea {
-  width: 100%;
-  resize: none;
-}
-
-.morphology-textarea {
-  height: 100px;
-}
-
-.diagnosis-textarea {
-  height: 150px;
-}
-
-.patch-selection {
-  margin-top: 1rem;
 }
 
 .patch-row {
-  display: flex;
-  gap: 20px;
-  overflow-x: auto;
+  display: flex; 
+  justify-content: flex-start; 
+  gap: 12px; 
+  overflow-x: auto; 
   padding: 10px 0;
+  min-width: 0; 
 }
 
 .patch-select-item {
@@ -453,12 +377,7 @@ onMounted(() => {
   flex-direction: column;
   align-items: center;
   cursor: pointer;
-  transition: all 0.3s;
-  flex-shrink: 0;
-}
-
-.patch-select-item:hover {
-  transform: scale(1.05);
+  margin: 5px;
 }
 
 .patch-select-image {
@@ -467,20 +386,81 @@ onMounted(() => {
   object-fit: cover;
   border: 2px solid #ddd;
   border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.patch-select-image:hover {
+  transform: scale(1.03);
 }
 
 .selected-patch {
-  border: 2px solid #409EFF;
-  box-shadow: 0 0 8px rgba(64, 158, 255, 0.6);
+  border: 3px solid #409EFF;
+  box-shadow: 0 0 8px rgba(64, 158, 255, 0.4);
 }
 
-.patch-name {
-  margin-top: 8px;
-  font-size: 14px;
-  color: #666;
+.patch-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+
+.btns {
+  display: flex;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.btns .el-button {
+  flex: 1;
+  padding: 0.4rem 0;
+  font-size: 0.9rem;
 }
 
 .description-content {
   white-space: pre-wrap;
+  font-size: 0.85rem;
 }
+
+
+.heatmap-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.image-column {
+  flex: 1 1 300px;
+  text-align: center;
+}
+
+.heatmap-image {
+  max-width: 100%;
+  max-height: 400px;
+}
+
+.empty-placeholder {
+  height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #999;
+  border: 1px dashed #ccc;
+}
+
+@media (max-width: 768px) {
+  .analyze-box {
+    flex-direction: column;
+  }
+
+  .btns {
+    flex-direction: column;
+  }
+
+  .patch-list {
+    justify-content: center;
+  }
+}
+
+
 </style>

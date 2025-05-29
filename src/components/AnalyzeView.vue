@@ -131,7 +131,7 @@ onMounted(() => {
         </div>
     
         <div class="patches">
-          <h3>Patch 区域</h3>
+          <h3 class="patch-title">Patch 区域</h3>
           <div class="patch-list">
             <div v-for="(patch, index) in displayedPatches" :key="index" class="patch-item">
               <img :src="patch.image" class="patch-image" />
@@ -250,7 +250,7 @@ html, body {
   margin: 0;
   padding: 0;
   height: 100%;
-  overflow: hidden; /* 禁止滚动条 */
+  overflow: hidden; 
 }
 
 .analyze-page {
@@ -276,6 +276,7 @@ html, body {
   margin: 0 auto;
   margin-top: -4.2rem;
 }
+
 .analyze-box {
   flex: 1; /* 占满剩余高度 */
   display: flex;
@@ -314,21 +315,38 @@ html, body {
   gap: 0.5rem;
   overflow: hidden;
 }
-
+::v-deep(.el-descriptions__title) {
+  text-align: center;
+  width: 100%;
+  font-weight: bold;
+  font-size: 1rem;
+}
 .meta {
   flex: 1;
   overflow: auto;
 }
 
+
 .patches {
   flex-shrink: 0;
 }
+
+.patch-title {
+  text-align: center;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+}
+
+
 
 .patch-list {
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
+  justify-content: center;
 }
+
 
 .patch-image {
   width: 120px;

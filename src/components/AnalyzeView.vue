@@ -7,6 +7,7 @@ const router = useRouter()
 const route = useRoute()
 
 const imageUrl = ref('')
+const heatmapDialogVisible = ref(false) // 新增：控制热图对话框显示
 
 const goPrev = () => {
   router.push('/upload')
@@ -30,6 +31,15 @@ const goNext = () => {
 
 const openZoomViewer = () => {
   window.open('/src/components/openseadragon/zoomFiles/test.html', '_blank')
+}
+
+// 新增：打开热图对话框
+const openHeatmapDialog = () => {
+  if (!imageUrl.value) {
+    ElMessage.warning('请先上传图片')
+    return
+  }
+  heatmapDialogVisible.value = true
 }
 
 const allPatches = ref([
@@ -145,17 +155,53 @@ onMounted(() => {
 
         <div class="btns">
           <el-button @click="goPrev">上一步</el-button>
+          <el-button type="success" plain @click="openHeatmapDialog">可视化热图</el-button>
           <el-button type="success" plain @click="openEditDialog">编辑报告</el-button>
           <el-button type="primary" @click="goNext">下一步</el-button>
         </div>
       </div>
     </div>
 
-    <!-- Edit Dialog -->
+    <!-- 热图对话框 -->
+    <el-dialog
+      v-model="heatmapDialogVisible"
+      title="可视化热图"
+      width="80%"
+      top="5vh"
+    >
+      <div class="heatmap-container">
+        <div class="image-column">
+          <h3>原始图像</h3>
+          <img 
+            v-if="imageUrl"
+            :src="imageUrl" 
+            alt="原始病理图像" 
+            class="heatmap-image"
+          />
+          <div v-else class="empty-placeholder">无原始图像</div>
+        </div>
+        <div class="image-column">
+          <h3>热图分析</h3>
+          <img 
+            src="/可视化热图.png" 
+            alt="可视化热图" 
+            class="heatmap-image"
+          />
+        </div>
+      </div>
+      
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button type="primary" @click="heatmapDialogVisible = false">关闭</el-button>
+        </span>
+      </template>
+    </el-dialog>
+  
+    <!-- 编辑报告对话框 -->
     <el-dialog
       v-model="editDialogVisible"
       title="编辑病理信息"
-      width="80%"
+      width="60%"
       top="5vh"
     >
       <div class="edit-dialog-content">
@@ -196,7 +242,6 @@ onMounted(() => {
                 class="patch-select-image"
                 :class="{ 'selected-patch': selectedPatches.some(p => p.name === patch.name) }"
               />
-              <div class="patch-name">{{ patch.name }}</div>
             </div>
           </div>
         </div>
@@ -330,9 +375,45 @@ onMounted(() => {
   display: flex;
   justify-content: space-between;
   margin-top: 2rem;
+  gap: 1rem;
 }
 
-/* Edit Dialog Styles */
+.btns .el-button {
+  flex: 1;
+}
+
+/* 热图对话框样式 */
+.heatmap-container {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+}
+
+.image-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.heatmap-image {
+  max-width: 100%;
+  max-height: 500px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.empty-placeholder {
+  height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #999;
+  border: 1px dashed #ddd;
+  width: 100%;
+}
+
+/* 编辑对话框样式 */
 .edit-dialog-content {
   display: flex;
   flex-direction: column;
